@@ -25,38 +25,3 @@ This project features a "Bento Grid" layout, a spotlight cursor effect, glassmor
 * **Animations:** Framer Motion
 * **Icons:** Lucide React & React Icons
 * **Deployment:** Netlify / Vercel (Ready)
-
-## 🚀 Getting Started
-
-### Prerequisites
-Ensure you have Node.js installed on your machine.
-
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/yourusername/portfolio-website.git](https://github.com/yourusername/portfolio-website.git)
-    cd portfolio-website
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-
-3.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
-
-4.  Open `http://localhost:5173` in your browser to see the result.
-
-## ⚙️ Configuration & Customization
-
-All personal data is centralized in `src/App.jsx` for easy editing.
-
-### 1. Update GitHub Integration
-Locate the `GITHUB_USERNAME` constant at the top of `src/App.jsx` and replace it with your handle:
-
-```javascript
-const GITHUB_USERNAME = "your-github-handle";
