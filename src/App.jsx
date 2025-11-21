@@ -14,7 +14,7 @@
     name: "Libin T", // [cite: 2]
     role: "Aspiring Software Engineer", // [cite: 3]
     email: "libinthankayathil@gmail.com", // [cite: 4]
-    summary: "Motivated and detail-oriented developer with a strong foundation in software development. Skilled in designing robust solutions and committed to clean coding practices. Experienced in building digital public goods impacting 200,000+ lives.", // [cite: 7, 8, 36]
+    summary: "I engineer scalable digital ecosystems. Bridging the gap between complex backend logic and fluid user interfaces, I build Digital Public Goods that have impacted over 200,000 lives. Focused on performance, open-source contribution, and clean architecture.",
     skills: [
       'JavaScript', 'TypeScript', 'Python', 'C', 
       'Node.js', 'Express', 'React', 'TailwindCSS', 
