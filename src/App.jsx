@@ -1,6 +1,6 @@
   import React, { useEffect, useState } from 'react';
-  import { motion, useMotionTemplate, useMotionValue, animate } from 'framer-motion';
-  import { Github, Linkedin, ExternalLink, Code2, Terminal, Cpu, Mail, Home, Briefcase, GraduationCap, Award, FolderGit2 } from 'lucide-react';
+  import { motion, useMotionTemplate, useMotionValue, animate, AnimatePresence } from 'framer-motion';
+  import { Github, Linkedin, ExternalLink, Code2, Terminal, Cpu, Mail, Home, Briefcase, GraduationCap, Award, FolderGit2, CheckCircle, X } from 'lucide-react';
 
   // --- BRAND ICONS (Requires: npm install react-icons) ---
   import { FaReact, FaNodeJs, FaPython, FaHtml5, FaCss3Alt, FaGitAlt, FaDocker } from 'react-icons/fa';
@@ -126,7 +126,7 @@
       { name: 'Home', icon: <Home size={18} />, href: '#' },
       { name: 'Work', icon: <FolderGit2 size={18} />, href: '#work' },
       { name: 'Exp', icon: <Briefcase size={18} />, href: '#experience' },
-      { name: 'Contact', icon: <Mail size={18} />, href: `mailto:${RESUME_DATA.email}` },
+      { name: 'Contact', icon: <Mail size={18} />, href: '#contact' },
     ];
 
     return (
@@ -182,6 +182,8 @@
   // --- MAIN APP ---
   function App() {
     const [repos, setRepos] = useState([]);
+    const [showPopup, setShowPopup] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
       if(GITHUB_USERNAME) {
@@ -193,6 +195,43 @@
           .catch(err => console.error("GitHub API Error:", err));
       }
     }, []);
+
+    const handleFormSubmit = async (e) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      try {
+        // Submit to Google Forms
+        const response = await fetch(form.action, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        });
+
+        // Since we're using no-cors, we can't check the response
+        // But we'll assume success and show the popup
+        setShowPopup(true);
+        form.reset();
+        
+        // Auto-hide popup after 5 seconds
+        setTimeout(() => {
+          setShowPopup(false);
+        }, 5000);
+      } catch (error) {
+        console.error('Form submission error:', error);
+        // Still show success popup as Google Forms might have received it
+        setShowPopup(true);
+        form.reset();
+        setTimeout(() => {
+          setShowPopup(false);
+        }, 5000);
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
 
     return (
       <div className="min-h-screen text-neutral-200 font-sans selection:bg-indigo-500/30 cursor-none relative">
@@ -350,6 +389,112 @@
               ))}
             </div>
           </section>
+
+          {/* CONTACT SECTION */}
+          <section id="contact" className="px-6 md:px-20 py-20 max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-white mb-12 flex items-center gap-3">
+              <Mail className="text-indigo-500" /> Get In Touch
+            </h2>
+            
+            <div className="max-w-2xl mx-auto">
+              <form 
+                onSubmit={handleFormSubmit}
+                action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSesHdnFkvR0zOpTOUAaxX2oj3_nI3qyKVUkdxSBQ_-Lab_sgg/formResponse"
+                method="POST"
+                target="_self"
+                className="bg-neutral-900/60 backdrop-blur-sm border border-white/10 rounded-3xl p-8 space-y-6"
+              >
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-neutral-300 mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="entry.1353045979"
+                    required
+                    className="w-full px-4 py-3 bg-neutral-800/50 border border-white/10 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                    placeholder="Your name"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-neutral-300 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="entry.948902745"
+                    required
+                    className="w-full px-4 py-3 bg-neutral-800/50 border border-white/10 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-neutral-300 mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="entry.1177390860"
+                    required
+                    rows="6"
+                    className="w-full px-4 py-3 bg-neutral-800/50 border border-white/10 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none"
+                    placeholder="Your message here..."
+                  ></textarea>
+                </div>
+
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  className="w-full px-8 py-4 bg-white text-black font-bold rounded-full flex items-center justify-center gap-2 hover:bg-indigo-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Mail size={20} /> {isSubmitting ? 'Sending...' : 'Send Message'}
+                </motion.button>
+              </form>
+            </div>
+          </section>
+
+          {/* POPUP CONFIRMATION */}
+          <AnimatePresence>
+            {showPopup && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                onClick={() => setShowPopup(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-neutral-900 border border-white/20 rounded-3xl p-8 max-w-md w-full shadow-2xl relative"
+                >
+                  <button
+                    onClick={() => setShowPopup(false)}
+                    className="absolute top-4 right-4 text-neutral-400 hover:text-white transition-colors"
+                  >
+                    <X size={24} />
+                  </button>
+                  <div className="flex flex-col items-center text-center">
+                    <div className="mb-4 p-4 bg-indigo-500/20 rounded-full">
+                      <CheckCircle size={48} className="text-indigo-400" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
+                    <p className="text-neutral-400">
+                      Thank you for reaching out. I'll get back to you soon.
+                    </p>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <footer className="py-12 text-center text-neutral-600 border-t border-white/5 mt-20">
             <p>© 2025 {RESUME_DATA.name}. Built with React.</p>
